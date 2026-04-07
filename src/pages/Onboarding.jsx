@@ -20,8 +20,8 @@ function Onboarding() {
         
         if (res.ok) {
           const userData = await res.json()
-          // 온보딩 완료 여부 확인 (name이 있으면 프로필 정보가 저장된 것으로 판단)
-          if (userData.onboardingCompleted || userData.name) {
+          // 온보딩 완료 여부는 플래그 값으로만 판단
+          if (userData.onboardingCompleted) {
             // 이미 온보딩 완료됨 - 홈으로 이동
             navigate('/', { replace: true })
           }
