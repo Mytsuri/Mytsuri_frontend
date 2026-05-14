@@ -1,4 +1,4 @@
-# Mytsuri_frontend 리드미
+# Mytsuri_frontend
 
 ## 프로젝트 개요
 - 축제 정보 탐색, 리스트 관리, 알림, 지도 기반 탐색 등 다양한 기능을 제공하는 프론트엔드 SPA입니다.
