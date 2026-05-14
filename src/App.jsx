@@ -20,12 +20,13 @@ import OnboardingSurvey from './pages/OnboardingSurvey'
 import ReviewWrite from './pages/ReviewWrite'
 
 function App() {
+  const ONBOARDING_DONE_KEY = 'mytsuri_onboarding_done'
   const [authStatus, setAuthStatus] = useState('loading')
+  const [needsOnboarding, setNeedsOnboarding] = useState(false)
 
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
     const refreshToken = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/auth/refresh', {
@@ -59,10 +60,27 @@ function App() {
         }
 
         if (!isMounted) return
-        setAuthStatus(res.ok ? 'authed' : 'guest')
+        if (!res.ok) {
+          setAuthStatus('guest')
+          setNeedsOnboarding(false)
+          return
+        }
+
+        const userData = await res.json().catch(() => ({}))
+        const onboardingCompleted =
+          Boolean(userData?.onboardingCompleted) ||
+          localStorage.getItem(ONBOARDING_DONE_KEY) === 'true'
+        if (onboardingCompleted) {
+          localStorage.setItem(ONBOARDING_DONE_KEY, 'true')
+        }
+        setNeedsOnboarding(!onboardingCompleted)
+        setAuthStatus('authed')
       } catch (error) {
         if (error.name === 'AbortError') return
-        if (isMounted) setAuthStatus('guest')
+        if (isMounted) {
+          setAuthStatus('guest')
+          setNeedsOnboarding(false)
+        }
       }
     }
 
@@ -72,51 +90,65 @@ function App() {
     const handleLogout = () => {
       if (isMounted) {
         setAuthStatus('guest')
+        setNeedsOnboarding(false)
+      }
+    }
+    const handleOnboardingCompleted = () => {
+      if (isMounted) {
+        localStorage.setItem(ONBOARDING_DONE_KEY, 'true')
+        setNeedsOnboarding(false)
       }
     }
     window.addEventListener('logout', handleLogout)
+    window.addEventListener('onboardingCompleted', handleOnboardingCompleted)
 
     return () => {
       isMounted = false
       controller.abort()
       window.removeEventListener('logout', handleLogout)
+      window.removeEventListener('onboardingCompleted', handleOnboardingCompleted)
     }
   }, [])
 
   if (authStatus === 'loading') return null
 
   const isLoggedIn = authStatus === 'authed'
+  const getProtectedElement = (element) => {
+    if (!isLoggedIn) return <Navigate to="/login" replace />
+    if (needsOnboarding) return <Navigate to="/onboarding" replace />
+    return element
+  }
 
   return (
     <Routes>
-      {/* 인증 불필요 */}
-      <Route path="/login" element={isLoggedIn ? <Navigate to="/" replace /> : <Login />} />
-      <Route path="/onboarding" element={<Onboarding />} />
-      <Route path="/onboarding/survey" element={<OnboardingSurvey />} />
+      {/* 인증/온보딩 분기 */}
+      <Route path="/login" element={isLoggedIn ? <Navigate to={needsOnboarding ? '/onboarding' : '/'} replace /> : <Login />} />
+      <Route path="/onboarding" element={isLoggedIn ? (needsOnboarding ? <Onboarding /> : <Navigate to="/" replace />) : <Navigate to="/login" replace />} />
+      <Route path="/onboarding/survey" element={isLoggedIn ? (needsOnboarding ? <OnboardingSurvey /> : <Navigate to="/" replace />) : <Navigate to="/login" replace />} />
 
       {/* 인증 필요 */}
-      <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" replace />} />
-      <Route path="/map" element={isLoggedIn ? <MapPage /> : <Navigate to="/login" replace />} />
-      <Route path="/search" element={isLoggedIn ? <Search /> : <Navigate to="/login" replace />} />
-      <Route path="/notifications" element={isLoggedIn ? <Notification /> : <Navigate to="/login" replace />} />
+      <Route path="/" element={getProtectedElement(<Home />)} />
+      <Route path="/map" element={getProtectedElement(<MapPage />)} />
+      <Route path="/search" element={getProtectedElement(<Search />)} />
+      <Route path="/notifications" element={getProtectedElement(<Notification />)} />
 
-      <Route path="/list" element={isLoggedIn ? <List /> : <Navigate to="/login" replace />} />
-      <Route path="/list/new" element={isLoggedIn ? <ListDetail /> : <Navigate to="/login" replace />} />
-      <Route path="/list/:id" element={isLoggedIn ? <ListDetail /> : <Navigate to="/login" replace />} />
-      <Route path="/list/:id/add" element={isLoggedIn ? <ListAddFestival /> : <Navigate to="/login" replace />} />
-      <Route path="/list/:id/invite" element={isLoggedIn ? <ListInvite /> : <Navigate to="/login" replace />} />
-      <Route path="/list/:id/edit" element={isLoggedIn ? <ListEdit /> : <Navigate to="/login" replace />} />
-      <Route path="/list/:id/edit-festivals" element={isLoggedIn ? <ListEditFestivals /> : <Navigate to="/login" replace />} />
+      <Route path="/list" element={getProtectedElement(<List />)} />
+      <Route path="/list/new" element={getProtectedElement(<ListDetail />)} />
+      <Route path="/list/:id" element={getProtectedElement(<ListDetail />)} />
+      <Route path="/list/:id/add" element={getProtectedElement(<ListAddFestival />)} />
+      <Route path="/list/:id/invite" element={getProtectedElement(<ListInvite />)} />
+      <Route path="/list/:id/edit" element={getProtectedElement(<ListEdit />)} />
+      <Route path="/list/:id/edit-festivals" element={getProtectedElement(<ListEditFestivals />)} />
 
-      <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" replace />} />
-      <Route path="/profile/edit" element={isLoggedIn ? <ProfileEdit /> : <Navigate to="/login" replace />} />
+      <Route path="/profile" element={getProtectedElement(<Profile />)} />
+      <Route path="/profile/edit" element={getProtectedElement(<ProfileEdit />)} />
 
-      <Route path="/festivals" element={isLoggedIn ? <FestivalList /> : <Navigate to="/login" replace />} />
-      <Route path="/festivals/city/:cityId" element={isLoggedIn ? <FestivalList /> : <Navigate to="/login" replace />} />
-      <Route path="/festivals/:category" element={isLoggedIn ? <FestivalList /> : <Navigate to="/login" replace />} />
+      <Route path="/festivals" element={getProtectedElement(<FestivalList />)} />
+      <Route path="/festivals/city/:cityId" element={getProtectedElement(<FestivalList />)} />
+      <Route path="/festivals/:category" element={getProtectedElement(<FestivalList />)} />
 
-      <Route path="/festival/:id" element={isLoggedIn ? <FestivalDetail /> : <Navigate to="/login" replace />} />
-      <Route path="/festival/:id/review" element={isLoggedIn ? <ReviewWrite /> : <Navigate to="/login" replace />} />
+      <Route path="/festival/:id" element={getProtectedElement(<FestivalDetail />)} />
+      <Route path="/festival/:id/review" element={getProtectedElement(<ReviewWrite />)} />
 
       {/* 404 - 와일드카드는 반드시 마지막 */}
       <Route path="*" element={<Navigate to={isLoggedIn ? '/' : '/login'} replace />} />

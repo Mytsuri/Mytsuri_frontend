@@ -80,15 +80,19 @@ function OnboardingSurvey() {
         answer: q.options[answers[i]],
       }))
       try {
-        await fetch('http://localhost:5000/api/users/me/survey', {
+        const res = await fetch('http://localhost:5000/api/users/me/survey', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({ survey: payload }),
         })
+        if (!res.ok) {
+          throw new Error('설문 저장 실패')
+        }
       } catch {
         // ignore
       }
+      window.dispatchEvent(new Event('onboardingCompleted'))
       navigate('/', { replace: true })
     }
   }
@@ -102,6 +106,7 @@ function OnboardingSurvey() {
   }
 
   const handleSkip = () => {
+    window.dispatchEvent(new Event('onboardingCompleted'))
     navigate('/', { replace: true })
   }
 
