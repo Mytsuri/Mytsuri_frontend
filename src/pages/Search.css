@@ -2,16 +2,11 @@
   min-height: 100vh;
   background: #000;
   color: #F5F5F5;
-  --top-height: calc(132px + env(safe-area-inset-top, 0px));
+  --top-height: calc(64px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
   padding-bottom: 80px;
 }
 
 .search-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #000;
   padding-bottom: 16px;
 }
@@ -141,13 +136,11 @@
 }
 
 .search-main {
-  padding-top: var(--top-height);
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: var(--top-height) 20px 0;
 }
 
 .search-main--with-filters {
-  --top-height: calc(180px + env(safe-area-inset-top, 0px));
+  --top-height: calc(112px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .search-section {
@@ -245,6 +238,9 @@
   font-size: 1rem;
   font-weight: 600;
   color: #F5F5F5;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -256,8 +252,19 @@
   align-items: center;
   gap: 4px;
   margin: 0 0 2px;
+  width: 100%;
+  min-width: 0;
   font-size: 0.75rem;
   color: rgba(245, 245, 245, 0.7);
+}
+
+.search-festival-card-location span,
+.search-festival-card-date span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .search-festival-card-meta {

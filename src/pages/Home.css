@@ -1,9 +1,4 @@
 .home-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #000;
 }
 
@@ -11,9 +6,9 @@
   min-height: 100vh;
   background-color: #000;
   color: #fff;
-  --status-bar-height: calc(68px + env(safe-area-inset-top, 0px));
-  --header-height: 48px;
-  padding-top: calc(var(--status-bar-height) + var(--header-height));
+  --mytsuri-header-bar: 56px;
+  --mytsuri-top-offset: calc(var(--mytsuri-status-inset) + var(--mytsuri-header-bar) + var(--mytsuri-top-buffer));
+  padding-top: var(--mytsuri-top-offset);
   padding-bottom: 80px;
 }
 
@@ -21,18 +16,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 20px;
+  padding: 8px 20px;
+  min-height: var(--mytsuri-header-bar);
   background: #000;
 }
 
 .home-logo {
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
 .home-logo img {
-  height: auto;
-  width: auto;
+  width: 40px;
+  height: 40px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .home-header-actions {
@@ -147,12 +147,18 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .banner-subtitle {
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .banner-dots {
@@ -252,6 +258,9 @@
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
   margin: 4px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .section-more {
@@ -320,6 +329,9 @@
   font-size: 0.9rem;
   font-weight: 600;
   margin: 0 0 4px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -330,9 +342,20 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  width: 100%;
+  min-width: 0;
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.7);
   margin: 0 0 2px;
+}
+
+.festival-card-location span,
+.festival-card-date span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .festival-card-meta {
@@ -460,9 +483,11 @@
   position: absolute;
   top: 21px;
   left: 16px;
+  right: 16px;
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
 
 .public-list-card-title {
@@ -473,6 +498,9 @@
   color: #fff;
   letter-spacing: -0.72px;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .public-list-card-count {

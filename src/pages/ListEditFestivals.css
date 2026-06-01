@@ -184,6 +184,12 @@
   letter-spacing: -0.32px;
   color: #fff;
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lef-festival-card-row {
@@ -191,6 +197,8 @@
   align-items: center;
   gap: 6px;
   margin: 0;
+  width: 100%;
+  min-width: 0;
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   font-size: 12px;
@@ -201,6 +209,14 @@
 
 .lef-festival-card-row svg {
   flex-shrink: 0;
+}
+
+.lef-festival-card-row span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lef-festival-card-meta {

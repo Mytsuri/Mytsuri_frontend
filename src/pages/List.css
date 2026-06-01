@@ -2,15 +2,11 @@
   min-height: 100vh;
   background: #070707;
   color: #fff;
+  --mytsuri-top-offset: calc(var(--mytsuri-status-inset) + 74px + var(--mytsuri-top-buffer));
   padding-bottom: 80px;
 }
 
 .list-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #070707;
 }
 
@@ -31,10 +27,7 @@
 }
 
 .list-main {
-  padding-top: calc(54px + 68px);
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 24px;
+  padding: var(--mytsuri-top-offset) 20px 24px;
 }
 
 .list-loading,

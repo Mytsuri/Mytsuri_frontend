@@ -20,3 +20,11 @@
   align-items: center;
   gap: 6px;
 }
+
+/* 실제 기기: 가짜 상태바 숨기고 노치 safe-area만 확보 */
+.status-bar-spacer {
+  height: var(--mytsuri-status-inset);
+  min-height: 0;
+  flex-shrink: 0;
+  width: 100%;
+}

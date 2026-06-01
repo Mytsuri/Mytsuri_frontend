@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react'
+import { useIsMobilePhone } from '../../hooks/useIsMobilePhone'
 import './StatusBar.css'
 
 function StatusBar() {
+  const isMobilePhone = useIsMobilePhone()
   const [time, setTime] = useState(() => formatTime(new Date()))
 
   useEffect(() => {
+    if (isMobilePhone) return undefined
+
     const timer = setInterval(() => {
       setTime(formatTime(new Date()))
     }, 1000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isMobilePhone])
+
+  if (isMobilePhone) {
+    return <div className="status-bar-spacer" aria-hidden="true" />
+  }
 
   return (
     <div className="status-bar" role="status" aria-label="상태바">

@@ -3,15 +3,10 @@
   background: #000;
   color: #F5F5F5;
   padding-bottom: 24px;
-  --top-height: calc(68px + env(safe-area-inset-top, 0px) + 56px);
+  --top-height: calc(56px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .notification-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #000;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -47,10 +42,7 @@
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-top: var(--top-height);
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 24px;
+  padding: var(--top-height) 20px 24px;
 }
 
 .notification-error {

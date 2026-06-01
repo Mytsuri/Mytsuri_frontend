@@ -4,23 +4,18 @@
   color: #fff;
   padding-bottom: 80px;
   overflow-x: hidden;
-  --top-height: calc(68px + env(safe-area-inset-top, 0px) + 52px + 44px);
+  --top-height: calc(52px + 44px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .festival-list-page.festival-list-page--with-cities {
-  --top-height: calc(68px + env(safe-area-inset-top, 0px) + 52px + 72px);
+  --top-height: calc(52px + 72px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .festival-list-page.festival-list-page--section {
-  --top-height: calc(68px + env(safe-area-inset-top, 0px) + 44px);
+  --top-height: calc(44px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .festival-list-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #000;
   overflow-x: hidden;
   width: 100%;
@@ -31,6 +26,7 @@
   align-items: center;
   padding: 12px 20px;
   min-height: 44px;
+  min-width: 0;
 }
 
 .festival-list-back {
@@ -53,6 +49,11 @@
   color: #fff;
   margin: 0;
   margin-left: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .festival-list-cities {
@@ -147,10 +148,7 @@
 }
 
 .festival-list-main {
-  padding-top: var(--top-height);
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 24px;
+  padding: var(--top-height) 20px 24px;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -216,6 +214,9 @@
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -226,6 +227,8 @@
   align-items: center;
   gap: 6px;
   margin: 0;
+  width: 100%;
+  min-width: 0;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.75);
 }
@@ -235,6 +238,8 @@
 }
 
 .festival-list-card-row span {
+  flex: 1;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -1,0 +1,18 @@
+/* 상단 헤더: 스크롤해도 고정 */
+[class$='-top-fixed'],
+.laf-top,
+.pf-status-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+/* StatusBar가 없는 fixed 헤더: safe-area 확보 */
+[class$='-top-fixed']:not(:has(.status-bar)):not(:has(.status-bar-spacer)),
+.laf-top:not(:has(.status-bar)):not(:has(.status-bar-spacer)),
+.pf-status-top:not(:has(.status-bar)):not(:has(.status-bar-spacer)) {
+  padding-top: var(--mytsuri-status-inset);
+}

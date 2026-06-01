@@ -97,12 +97,14 @@ function ListDetail() {
   const [moreOpen, setMoreOpen] = useState(false)
   const [sortOpen, setSortOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [leaveShareModalOpen, setLeaveShareModalOpen] = useState(false)
   const [addToListOpen, setAddToListOpen] = useState(false)
   const [selectedFestivalId, setSelectedFestivalId] = useState(null)
   const [toastVisible, setToastVisible] = useState(false)
   const [toastMsg, setToastMsg] = useState('리스트에 축제가 추가되었어요')
   const [canEdit, setCanEdit] = useState(false)
-  const [currentUserId, setCurrentUserId] = useState(null)
+  const [isOwner, setIsOwner] = useState(false)
+  const [isAcceptedCollaborator, setIsAcceptedCollaborator] = useState(false)
   const moreRef = useRef(null)
   const sortRef = useRef(null)
   const moreBtnRef = useRef(null)
@@ -168,7 +170,6 @@ function ListDetail() {
         if (userRes.ok) {
           const userData = await userRes.json()
           userId = userData.userId
-          if (isMounted) setCurrentUserId(userId)
         }
 
         // 리스트 조회
@@ -184,13 +185,15 @@ function ListDetail() {
           
           // 권한 확인: 소유자이거나 accepted 협력자인 경우 수정 가능
           const dataUserId = typeof data.user_id === 'string' ? data.user_id : data.user_id?.toString()
-          const isOwner = dataUserId === userId
-          const isCollaborator = data.collaborators?.some(c => {
+          const isOwnerUser = dataUserId === userId
+          const isCollaboratorUser = data.collaborators?.some(c => {
             const collabUserId = c.user_id?._id || c.user_id
             const collabUserIdStr = typeof collabUserId === 'string' ? collabUserId : collabUserId?.toString()
             return collabUserIdStr === userId && c.status === 'accepted'
           })
-          setCanEdit(isOwner || isCollaborator)
+          setIsOwner(isOwnerUser)
+          setIsAcceptedCollaborator(isCollaboratorUser && !isOwnerUser)
+          setCanEdit(isOwnerUser || isCollaboratorUser)
         }
       } catch (e) {
         if (e.name === 'AbortError') return
@@ -293,22 +296,17 @@ function ListDetail() {
 
   const handleDeleteList = async () => {
     try {
-      console.log('리스트 삭제 시작 - ID:', id)
       setListLoading(true)
       const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       })
-      console.log('삭제 응답 상태:', res.status, res.statusText)
-      
+
       if (!res.ok) {
-        const errData = await res.text()
-        console.error('삭제 에러 응답:', errData)
         throw new Error('리스트 삭제 실패')
       }
-      
-      console.log('리스트 삭제 성공, /list로 이동')
+
       navigate('/list')
     } catch (err) {
       console.error('handleDeleteList 에러:', err)
@@ -318,6 +316,30 @@ function ListDetail() {
       setListLoading(false)
     }
   }
+
+  const handleLeaveShare = async () => {
+    try {
+      setListLoading(true)
+      const res = await fetch(`http://localhost:5000/api/lists/${id}/collaborators/reject`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+
+      if (!res.ok) {
+        throw new Error('공유 취소 실패')
+      }
+
+      navigate('/list')
+    } catch (err) {
+      console.error('handleLeaveShare 에러:', err)
+      setToastMsg('공유 취소에 실패했어요')
+      setToastVisible(true)
+    } finally {
+      setListLoading(false)
+    }
+  }
+
+  const canShowMoreMenu = isOwner || isAcceptedCollaborator
 
   const SORT_OPTIONS = [
     { key: 'newest', label: '최신 추가 순' },
@@ -351,16 +373,18 @@ function ListDetail() {
               <LeftArrowIcon />
             </button>
             <div className="ld-cover-header-right" ref={moreRef}>
-              <button ref={moreBtnRef} type="button" className="ld-cover-btn" aria-label="더보기" onClick={() => {
-                setSortOpen(false)
-                if (!moreOpen && moreBtnRef.current) {
-                  const r = moreBtnRef.current.getBoundingClientRect()
-                  setMorePos({ top: r.bottom + 8, right: window.innerWidth - r.right })
-                }
-                setMoreOpen((p) => !p)
-              }}>
-                <MoreIcon />
-              </button>
+              {canShowMoreMenu && (
+                <button ref={moreBtnRef} type="button" className="ld-cover-btn" aria-label="더보기" onClick={() => {
+                  setSortOpen(false)
+                  if (!moreOpen && moreBtnRef.current) {
+                    const r = moreBtnRef.current.getBoundingClientRect()
+                    setMorePos({ top: r.bottom + 8, right: window.innerWidth - r.right })
+                  }
+                  setMoreOpen((p) => !p)
+                }}>
+                  <MoreIcon />
+                </button>
+              )}
             </div>
           </header>
 
@@ -385,10 +409,7 @@ function ListDetail() {
               <PlusSmallIcon />
             </button>
           )}
-          {(() => {
-            const dataUserId = typeof listData?.user_id === 'string' ? listData.user_id : listData?.user_id?.toString()
-            return dataUserId === currentUserId
-          })() && (
+          {isOwner && (
             <button type="button" className="ld-action-btn" onClick={() => navigate(`/list/${id}/invite`)}>
               친구 초대
               <InviteIcon />
@@ -462,7 +483,7 @@ function ListDetail() {
           </div>
         </main>
 
-        {moreOpen && (
+        {moreOpen && canShowMoreMenu && (
           <div ref={moreDropRef} className="ld-dropdown" style={{ top: morePos.top, right: morePos.right }}>
             {canEdit && (
               <>
@@ -470,13 +491,14 @@ function ListDetail() {
                 <button type="button" className="ld-dropdown-item" onClick={() => { setMoreOpen(false); navigate(`/list/${id}/edit-festivals`) }}>축제 편집</button>
               </>
             )}
-            {listData?.user_id === currentUserId && (
+            {isOwner && (
               <button type="button" className="ld-dropdown-item" onClick={() => { setMoreOpen(false); navigate(`/list/${id}/invite`) }}>친구 초대</button>
             )}
-            {canEdit ? (
-              <button type="button" className={`ld-dropdown-item ${!listData?.user_id === currentUserId ? 'ld-dropdown-item--last' : ''} ld-dropdown-item--danger`} onClick={() => { setMoreOpen(false); setDeleteModalOpen(true) }}>리스트 삭제</button>
-            ) : (
-              <button type="button" className="ld-dropdown-item ld-dropdown-item--last ld-dropdown-item--danger" onClick={() => { setMoreOpen(false); setDeleteModalOpen(true) }}>공유 취소</button>
+            {isOwner && (
+              <button type="button" className="ld-dropdown-item ld-dropdown-item--last ld-dropdown-item--danger" onClick={() => { setMoreOpen(false); setDeleteModalOpen(true) }}>리스트 삭제</button>
+            )}
+            {isAcceptedCollaborator && (
+              <button type="button" className="ld-dropdown-item ld-dropdown-item--last ld-dropdown-item--danger" onClick={() => { setMoreOpen(false); setLeaveShareModalOpen(true) }}>공유 취소</button>
             )}
           </div>
         )}
@@ -504,6 +526,19 @@ function ListDetail() {
               <div className="ld-delete-modal-actions">
                 <button type="button" className="ld-delete-modal-cancel" onClick={() => setDeleteModalOpen(false)}>취소</button>
                 <button type="button" className="ld-delete-modal-confirm" onClick={() => { setDeleteModalOpen(false); handleDeleteList() }}>삭제하기</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {leaveShareModalOpen && (
+          <div className="ld-delete-modal-overlay" onClick={() => setLeaveShareModalOpen(false)}>
+            <div className="ld-delete-modal" onClick={(e) => e.stopPropagation()}>
+              <h2 className="ld-delete-modal-title">공유를 취소할까요?</h2>
+              <p className="ld-delete-modal-description">내 리스트에서 이 공유 리스트가 제거됩니다.</p>
+              <div className="ld-delete-modal-actions">
+                <button type="button" className="ld-delete-modal-cancel" onClick={() => setLeaveShareModalOpen(false)}>취소</button>
+                <button type="button" className="ld-delete-modal-confirm" onClick={() => { setLeaveShareModalOpen(false); handleLeaveShare() }}>공유 취소</button>
               </div>
             </div>
           </div>

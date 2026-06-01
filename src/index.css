@@ -9,6 +9,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --mytsuri-safe-top: env(safe-area-inset-top, 0px);
+  --mytsuri-top-buffer: 6px;
+  /* iOS 스타일 가짜 상태바 높이 (데스크톱·태블릿 미리보기용) */
+  --mytsuri-status-bar-extra: 68px;
+  --mytsuri-status-inset: calc(var(--mytsuri-status-bar-extra) + var(--mytsuri-safe-top));
+}
+
+/* useIsMobilePhone.js 의 MOBILE_PHONE_MEDIA 와 동일 조건 */
+@media (max-width: 767px) and (hover: none) and (pointer: coarse) {
+  :root {
+    /* 일부 Android/WebView는 safe-area가 0이라 실제 상태바 높이를 보정 */
+    --mytsuri-status-inset: max(var(--mytsuri-safe-top), 24px);
+  }
 }
 
 * {
@@ -28,6 +41,14 @@ body {
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
+}
+
+/* PC 넓은 화면: 앱 본문은 숨기고 안내 화면만 (창 축소 시 해제) */
+@media (min-width: 768px) {
+  #root:has(.viewport-gate) {
+    max-width: none;
+    margin: 0;
+  }
 }
 
 .page-placeholder {

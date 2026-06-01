@@ -2,15 +2,10 @@
   min-height: 100vh;
   background: #000;
   color: #F5F5F5;
-  --top-height: calc(120px + env(safe-area-inset-top, 0px));
+  --top-height: calc(52px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .laf-top {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #000;
   padding-bottom: 12px;
 }
@@ -82,7 +77,6 @@
 }
 
 .laf-main {
-  padding-top: var(--top-height);
   padding: var(--top-height) 20px 80px;
 }
 
@@ -200,6 +194,12 @@
   letter-spacing: -0.32px;
   color: #fff;
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .laf-card-row {
@@ -207,6 +207,8 @@
   align-items: center;
   gap: 6px;
   margin: 0;
+  width: 100%;
+  min-width: 0;
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   font-size: 12px;
@@ -217,6 +219,14 @@
 
 .laf-card-row svg {
   flex-shrink: 0;
+}
+
+.laf-card-row span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .laf-card-meta {

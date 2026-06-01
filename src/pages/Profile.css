@@ -7,9 +7,6 @@
 }
 
 .pf-status-top {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   background: #070707;
 }
 
@@ -19,6 +16,7 @@
   flex-direction: column;
   gap: 15px;
   align-items: center;
+  padding-top: calc(var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
   padding-bottom: 80px;
 }
 

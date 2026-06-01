@@ -2,14 +2,10 @@
   min-height: 100vh;
   background: #070707;
   color: #F5F5F5;
+  --mytsuri-top-offset: calc(var(--mytsuri-status-inset) + 64px + var(--mytsuri-top-buffer));
 }
 
 .review-write-top-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
   background: #070707;
 }
 
@@ -32,7 +28,7 @@
 }
 
 .review-write-main {
-  padding-top: calc(94px + env(safe-area-inset-top, 0px));
+  padding-top: var(--mytsuri-top-offset);
   padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;

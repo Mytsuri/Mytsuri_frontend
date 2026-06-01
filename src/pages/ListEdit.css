@@ -7,9 +7,14 @@
 }
 
 .le-top-fixed {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  background: transparent;
+}
+
+.le-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
 .le-loading {
@@ -18,12 +23,6 @@
   font-size: 14px;
   text-align: center;
   padding: 60px 0;
-}
-
-.le-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 /* 사진 영역 */
