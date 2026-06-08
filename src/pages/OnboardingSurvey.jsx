@@ -39,7 +39,7 @@ function OnboardingSurvey() {
     // 온보딩 완료된 사용자인지 확인
     const checkOnboardingStatus = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/users/me', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           method: 'GET',
           credentials: 'include'
         })
@@ -80,7 +80,7 @@ function OnboardingSurvey() {
         answer: q.options[answers[i]],
       }))
       try {
-        const res = await fetch('http://localhost:5000/api/users/me/survey', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me/survey', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -93,7 +93,7 @@ function OnboardingSurvey() {
         // ignore
       }
       try {
-        await fetch('http://localhost:5000/api/users/me/onboarding-complete', {
+        await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me/onboarding-complete', {
           method: 'POST',
           credentials: 'include',
         })
@@ -115,7 +115,7 @@ function OnboardingSurvey() {
 
   const handleSkip = async () => {
     try {
-      await fetch('http://localhost:5000/api/users/me/onboarding-complete', {
+      await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me/onboarding-complete', {
         method: 'POST',
         credentials: 'include',
       })

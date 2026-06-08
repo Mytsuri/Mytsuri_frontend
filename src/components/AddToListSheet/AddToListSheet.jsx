@@ -38,7 +38,7 @@ function AddToListSheet({ isOpen, onClose, festivalId, festivalImages = [], adde
         setSuccessMessage(false)
         console.log('Fetching lists...')
         
-        const res = await fetch('http://localhost:5000/api/lists', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/lists', {
           credentials: 'include'
         })
 
@@ -70,7 +70,7 @@ function AddToListSheet({ isOpen, onClose, festivalId, festivalImages = [], adde
 
     try {
       setAddingToList(listId)
-      const res = await fetch(`http://localhost:5000/api/lists/${listId}/items`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${listId}/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

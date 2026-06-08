@@ -54,7 +54,7 @@ function ListEdit() {
 
     const fetchList = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -117,7 +117,7 @@ function ListEdit() {
         payload.coverImage = nextCoverImage
       }
 
-      await fetch(`http://localhost:5000/api/lists/${id}`, {
+      await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

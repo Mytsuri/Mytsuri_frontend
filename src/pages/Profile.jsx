@@ -154,14 +154,14 @@ function Profile() {
       try {
         setLoading(true)
         // 사용자 정보 조회
-        let userRes = await fetch('http://localhost:5000/api/users/me', {
+        let userRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           credentials: 'include',
           signal: controller.signal,
         })
         
         // 401이 나면 토큰 갱신 시도
         if (userRes.status === 401) {
-          const refreshRes = await fetch('http://localhost:5000/api/auth/refresh', {
+          const refreshRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/auth/refresh', {
             method: 'POST',
             credentials: 'include',
             signal: controller.signal,
@@ -169,7 +169,7 @@ function Profile() {
           
           if (refreshRes.ok) {
             // 토큰 갱신 성공하면 다시 요청
-            userRes = await fetch('http://localhost:5000/api/users/me', {
+            userRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
               credentials: 'include',
               signal: controller.signal,
             })
@@ -187,7 +187,7 @@ function Profile() {
         const userData = await userRes.json()
         
         // 리뷰 조회
-        const reviewsRes = await fetch('http://localhost:5000/api/users/me/reviews', {
+        const reviewsRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me/reviews', {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -203,8 +203,8 @@ function Profile() {
             avatar: userData.profileImg 
               ? (userData.profileImg.startsWith('http') 
                 ? userData.profileImg 
-                : `http://localhost:5000${userData.profileImg}`)
-              : `http://localhost:5000/uploads/profiles/default.svg`,
+                : `http://mytsuri.mirim-it-show.site:3001${userData.profileImg}`)
+              : `http://mytsuri.mirim-it-show.site:3001/uploads/profiles/default.svg`,
           })
           setReviews(reviewsData.map((r) => ({
             id: r.id,
@@ -223,7 +223,7 @@ function Profile() {
         if (isMounted) {
           setUser({ 
             name: '사용자', 
-            avatar: `http://localhost:5000/uploads/profiles/default.svg`
+            avatar: `http://mytsuri.mirim-it-show.site:3001/uploads/profiles/default.svg`
           })
           setReviews(DUMMY_REVIEWS)
         }
@@ -239,7 +239,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       // 로그아웃 API 호출 (쿠키 삭제)
-      await fetch('http://localhost:5000/api/auth/logout', { method: 'POST', credentials: 'include' })
+      await fetch('http://mytsuri.mirim-it-show.site:3001/api/auth/logout', { method: 'POST', credentials: 'include' })
     } catch (error) {
       console.error('로그아웃 실패:', error)
     }
@@ -311,7 +311,7 @@ function Profile() {
     setReviews((prev) => prev.map((review) => (review.id === editingReview.id ? nextReview : review)))
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/me/reviews/${editingReview.id}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/users/me/reviews/${editingReview.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -343,7 +343,7 @@ function Profile() {
     setReviews((prev) => prev.filter((review) => review.id !== targetId))
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/me/reviews/${targetId}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/users/me/reviews/${targetId}`, {
         method: 'DELETE',
         credentials: 'include',
       })

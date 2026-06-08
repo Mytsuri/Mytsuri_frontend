@@ -13,7 +13,7 @@ function Onboarding() {
     // 온보딩 완료된 사용자인지 확인
     const checkOnboardingStatus = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/users/me', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           method: 'GET',
           credentials: 'include'
         })
@@ -39,7 +39,7 @@ function Onboarding() {
   const handleNext = async () => {
     if (!canNext) return
     try {
-      await fetch('http://localhost:5000/api/users/me', {
+      await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

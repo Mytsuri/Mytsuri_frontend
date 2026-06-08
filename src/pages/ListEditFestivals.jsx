@@ -58,7 +58,7 @@ function ListEditFestivals() {
 
     const fetchList = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -93,7 +93,7 @@ function ListEditFestivals() {
     setModalOpen(false)
 
     try {
-      const res = await fetch(`http://localhost:5000/api/lists/${id}/items/${pendingDeleteId}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}/items/${pendingDeleteId}`, {
         method: 'DELETE',
         credentials: 'include',
       })

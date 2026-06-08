@@ -198,7 +198,7 @@ function FestivalDetail() {
       try {
         setLoading(true)
         setError(null)
-        const res = await fetch(`http://localhost:5000/api/festivals/${id}`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}`, {
           signal: controller.signal,
           credentials: 'include'
         })
@@ -257,7 +257,7 @@ function FestivalDetail() {
         try {
           setReviewsLoading(true)
           console.log(`리뷰 로드 시작: /api/festivals/${id}/reviews`)
-          const res = await fetch(`http://localhost:5000/api/festivals/${id}/reviews`, {
+          const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}/reviews`, {
             credentials: 'include'
           })
           console.log('리뷰 응답 상태:', res.status)
@@ -285,7 +285,7 @@ function FestivalDetail() {
       try {
         setReviewsLoading(true)
         console.log(`초기 리뷰 로드: /api/festivals/${id}/reviews`)
-        const res = await fetch(`http://localhost:5000/api/festivals/${id}/reviews`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}/reviews`, {
           credentials: 'include'
         })
         console.log('초기 리뷰 응답 상태:', res.status)
@@ -313,7 +313,7 @@ function FestivalDetail() {
       try {
         setReviewsLoading(true)
         console.log(`리뷰 탭 선택 - 리뷰 새로고침: /api/festivals/${id}/reviews`)
-        const res = await fetch(`http://localhost:5000/api/festivals/${id}/reviews`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}/reviews`, {
           credentials: 'include'
         })
         console.log('리뷰 탭 클릭 시 응답 상태:', res.status)
@@ -566,7 +566,7 @@ function FestivalDetail() {
           // 축제 데이터 새로고침 (북마크 수 업데이트)
           if (id) {
             const controller = new AbortController()
-            fetch(`http://localhost:5000/api/festivals/${id}`, {
+            fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}`, {
               signal: controller.signal,
               credentials: 'include'
             })

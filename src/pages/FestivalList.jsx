@@ -64,7 +64,7 @@ function FestivalList() {
           params.append('season', category)
         }
 
-        const response = await fetch(`http://localhost:5000/api/festivals?${params.toString()}`, {
+        const response = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals?${params.toString()}`, {
           credentials: 'include',
         })
         
@@ -91,7 +91,7 @@ function FestivalList() {
 
     const fetchCities = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/home/cities', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/home/cities', {
           signal: controller.signal
         })
         if (!res.ok) return
@@ -115,7 +115,7 @@ function FestivalList() {
 
     const fetchCategories = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/home/categories', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/home/categories', {
           signal: controller.signal
         })
         if (!res.ok) return

@@ -76,7 +76,7 @@ function ListInvite() {
     const fetchData = async () => {
       try {
         // 사용자 정보 조회
-        const userRes = await fetch('http://localhost:5000/api/users/me', {
+        const userRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -88,7 +88,7 @@ function ListInvite() {
         }
 
         // 리스트 조회
-        const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -128,7 +128,7 @@ function ListInvite() {
 
     try {
       setInviting(true)
-      const res = await fetch(`http://localhost:5000/api/lists/${id}/collaborators`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}/collaborators`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -146,7 +146,7 @@ function ListInvite() {
       setEmail('')
       
       // 협력자 목록 다시 불러오기
-      const listRes = await fetch(`http://localhost:5000/api/lists/${id}`, {
+      const listRes = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
         credentials: 'include',
       })
       if (listRes.ok) {
@@ -163,7 +163,7 @@ function ListInvite() {
 
   const handleRemoveCollaborator = async (collaboratorId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/lists/${id}/collaborators/${collaboratorId}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}/collaborators/${collaboratorId}`, {
         method: 'DELETE',
         credentials: 'include',
       })

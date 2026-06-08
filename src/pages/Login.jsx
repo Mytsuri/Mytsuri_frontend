@@ -26,7 +26,7 @@
 
       try {
         // 팝업이 아니라 구글 OAuth 인증 화면으로 페이지 이동
-        window.location.assign('http://localhost:5000/api/auth/google')
+        window.location.assign('http://mytsuri.mirim-it-show.site:3001/api/auth/google')
       } catch (error) {
         console.error('OAuth 이동 오류:', error)
         setErrorMessage('구글 인증 화면으로 이동하지 못했습니다.')

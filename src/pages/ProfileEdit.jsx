@@ -45,7 +45,7 @@ function ProfileEdit() {
 
     const fetchUserInfo = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/users/me', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -59,10 +59,10 @@ function ProfileEdit() {
           if (data.profileImg) {
             const fullImageUrl = data.profileImg.startsWith('http')
               ? data.profileImg
-              : `http://localhost:5000${data.profileImg}`
+              : `http://mytsuri.mirim-it-show.site:3001${data.profileImg}`
             setAvatarPreview(fullImageUrl)
           } else {
-            setAvatarPreview(`http://localhost:5000/uploads/profiles/default.svg`)
+            setAvatarPreview(`http://mytsuri.mirim-it-show.site:3001/uploads/profiles/default.svg`)
           }
         }
       } catch (err) {
@@ -98,7 +98,7 @@ function ProfileEdit() {
       if (age.trim()) formData.append('age', age.trim())
       if (avatar) formData.append('profileImage', avatar)
 
-      const res = await fetch('http://localhost:5000/api/users/me', {
+      const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
         method: 'PUT',
         credentials: 'include',
         body: formData,

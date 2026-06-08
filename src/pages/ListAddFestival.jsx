@@ -63,7 +63,7 @@ function ListAddFestival() {
 
     const fetchPopular = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/search/popular', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/search/popular', {
           signal: controller.signal,
         })
         if (!res.ok) return
@@ -84,7 +84,7 @@ function ListAddFestival() {
 
     try {
       const params = new URLSearchParams({ q: term.trim() })
-      const res = await fetch(`http://localhost:5000/api/search?${params.toString()}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/search?${params.toString()}`, {
         credentials: 'include',
       })
       if (!res.ok) throw new Error()
@@ -128,7 +128,7 @@ function ListAddFestival() {
 
   const handleSelectFestival = async (festival) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/lists/${id}/items`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

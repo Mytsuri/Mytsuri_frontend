@@ -72,10 +72,10 @@ function Home() {
       try {
         setLoadError('')
         const [recommendationsRes, categoriesRes, citiesRes, sectionsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/recommendations', { signal: controller.signal, credentials: 'include' }),
-          fetch('http://localhost:5000/api/home/categories', { signal: controller.signal }),
-          fetch('http://localhost:5000/api/home/cities', { signal: controller.signal }),
-          fetch('http://localhost:5000/api/home/sections', { signal: controller.signal, credentials: 'include' }),
+          fetch('http://mytsuri.mirim-it-show.site:3001/api/recommendations', { signal: controller.signal, credentials: 'include' }),
+          fetch('http://mytsuri.mirim-it-show.site:3001/api/home/categories', { signal: controller.signal }),
+          fetch('http://mytsuri.mirim-it-show.site:3001/api/home/cities', { signal: controller.signal }),
+          fetch('http://mytsuri.mirim-it-show.site:3001/api/home/sections', { signal: controller.signal, credentials: 'include' }),
         ])
 
         if (!recommendationsRes.ok || !categoriesRes.ok || !citiesRes.ok || !sectionsRes.ok) {
@@ -122,7 +122,7 @@ function Home() {
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-    fetch('http://localhost:5000/api/lists/public', { signal: controller.signal, credentials: 'include' })
+    fetch('http://mytsuri.mirim-it-show.site:3001/api/lists/public', { signal: controller.signal, credentials: 'include' })
       .then((res) => res.ok ? res.json() : [])
       .then((data) => { if (isMounted && Array.isArray(data)) setPublicLists(data.filter((l) => l.isPublic === true)) })
       .catch(() => {})
@@ -135,7 +135,7 @@ function Home() {
     const controller = new AbortController()
     
     const fetchUnreadCount = () => {
-      fetch('http://localhost:5000/api/notifications/unread-count', { 
+      fetch('http://mytsuri.mirim-it-show.site:3001/api/notifications/unread-count', { 
         signal: controller.signal, 
         credentials: 'include' 
       })

@@ -28,7 +28,7 @@ function App() {
     const controller = new AbortController()
     const refreshToken = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/auth/refresh', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/auth/refresh', {
           method: 'POST',
           credentials: 'include',
           signal: controller.signal,
@@ -41,7 +41,7 @@ function App() {
 
     const checkAuth = async () => {
       try {
-        let res = await fetch('http://localhost:5000/api/users/me', {
+        let res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           method: 'GET',
           credentials: 'include',
           signal: controller.signal,
@@ -50,7 +50,7 @@ function App() {
         if (res.status === 401) {
           const refreshed = await refreshToken()
           if (refreshed) {
-            res = await fetch('http://localhost:5000/api/users/me', {
+            res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
               method: 'GET',
               credentials: 'include',
               signal: controller.signal,

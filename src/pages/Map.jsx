@@ -77,7 +77,7 @@ function MapPage() {
     const fetchFilters = async () => {
       try {
         setLoadError('')
-        const filtersRes = await fetch('http://localhost:5000/api/map/filters', { signal: controller.signal })
+        const filtersRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/map/filters', { signal: controller.signal })
         
         if (!filtersRes.ok) {
           throw new Error('필터 데이터를 불러오지 못했어요.')
@@ -109,7 +109,7 @@ function MapPage() {
     const controller = new AbortController()
     
     const fetchUnreadCount = () => {
-      fetch('http://localhost:5000/api/notifications/unread-count', { 
+      fetch('http://mytsuri.mirim-it-show.site:3001/api/notifications/unread-count', { 
         signal: controller.signal, 
         credentials: 'include' 
       })
@@ -169,7 +169,7 @@ function MapPage() {
         }
         
         const queryString = params.toString()
-        const url = `http://localhost:5000/api/map/markers${queryString ? '?' + queryString : ''}`
+        const url = `http://mytsuri.mirim-it-show.site:3001/api/map/markers${queryString ? '?' + queryString : ''}`
         
         const markersRes = await fetch(url, { signal: controller.signal })
         
@@ -372,7 +372,7 @@ function MapPage() {
                       setSelectedMarker(m.id)
                       setFestivalBottomSheet({ id: m.id, name: m.name, startDate: m.startDate, location: m.location, hashtags: m.hashtags || [], mainImage: m.image || null, reviewPhotos: [] })
                       try {
-                        const res = await fetch(`http://localhost:5000/api/festivals/${m.id}`, { credentials: 'include' })
+                        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${m.id}`, { credentials: 'include' })
                         if (res.ok) {
                           const data = await res.json()
                           const mainImage = (data.images && data.images[0]) || data.image || m.image || null
@@ -513,7 +513,7 @@ function MapPage() {
           onAddToListSuccess={() => {
             // 선택된 축제 데이터 새로고침 (북마크 수 업데이트)
             if (festivalBottomSheet?.id) {
-              fetch(`http://localhost:5000/api/festivals/${festivalBottomSheet.id}`, {
+              fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${festivalBottomSheet.id}`, {
                 credentials: 'include'
               })
                 .then(res => res.ok ? res.json() : null)

@@ -119,7 +119,7 @@ function ReviewWrite() {
       console.log('리뷰 데이터:', reviewData)
 
       // 서버에 리뷰 전송
-      const res = await fetch(`http://localhost:5000/api/festivals/${id}/reviews`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/festivals/${id}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

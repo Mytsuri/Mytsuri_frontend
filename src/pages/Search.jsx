@@ -70,7 +70,7 @@ function Search() {
     const controller = new AbortController()
     const fetchFilters = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/map/filters', { 
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/map/filters', { 
           signal: controller.signal,
           credentials: 'include'
         })
@@ -92,7 +92,7 @@ function Search() {
   useEffect(() => {
     const fetchRecentSearches = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/search/history', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/search/history', {
           credentials: 'include'
         })
         if (!res.ok) return
@@ -112,7 +112,7 @@ function Search() {
   useEffect(() => {
     const fetchPopular = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/search/popular')
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/search/popular')
         if (!res.ok) return
         const data = await res.json()
         setPopularFestivals(data)
@@ -174,7 +174,7 @@ function Search() {
 
       console.log("전송 파라미터:", params.toString())
 
-      const res = await fetch(`http://localhost:5000/api/search?${params.toString()}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/search?${params.toString()}`, {
         credentials: 'include'
       })
       
@@ -194,7 +194,7 @@ function Search() {
   const saveSearchHistory = async (searchQuery) => {
     try {
       // 서버에 저장 시도 (로그인 사용자)
-      const res = await fetch('http://localhost:5000/api/search/history', {
+      const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/search/history', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -209,7 +209,7 @@ function Search() {
 
       if (res.ok) {
         // 성공하면 최근 검색어 새로고침
-        const historyRes = await fetch('http://localhost:5000/api/search/history', {
+        const historyRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/search/history', {
           credentials: 'include'
         })
         if (historyRes.ok) {
@@ -261,7 +261,7 @@ function Search() {
       }
       if (selectedType?.value) params.append('type', selectedType.value)
 
-      const res = await fetch(`http://localhost:5000/api/search?${params.toString()}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/search?${params.toString()}`, {
         credentials: 'include'
       })
       

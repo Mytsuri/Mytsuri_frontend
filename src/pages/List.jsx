@@ -24,7 +24,7 @@ function List() {
 
     const fetchLists = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/lists', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/lists', {
           credentials: 'include',
           signal: controller.signal,
         })

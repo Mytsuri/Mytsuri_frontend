@@ -49,7 +49,7 @@ function Notification() {
     const fetchNotifications = async () => {
       try {
         setLoading(true)
-        const res = await fetch('http://localhost:5000/api/notifications', {
+        const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/notifications', {
           credentials: 'include'
         })
 
@@ -90,7 +90,7 @@ function Notification() {
   const handleNotificationClick = async (notificationId) => {
     if (!notificationId) return
     try {
-      const res = await fetch(`http://localhost:5000/api/notifications/${notificationId}/read`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
         credentials: 'include'
       })
@@ -116,7 +116,7 @@ function Notification() {
     setError('')
 
     try {
-      const res = await fetch(`http://localhost:5000/api/notifications/${notificationId}/${action}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/notifications/${notificationId}/${action}`, {
         method: 'POST',
         credentials: 'include'
       })

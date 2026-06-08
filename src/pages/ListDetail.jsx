@@ -162,7 +162,7 @@ function ListDetail() {
       setListLoading(true)
       try {
         // 사용자 정보 먼저 조회
-        const userRes = await fetch('http://localhost:5000/api/users/me', {
+        const userRes = await fetch('http://mytsuri.mirim-it-show.site:3001/api/users/me', {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -173,7 +173,7 @@ function ListDetail() {
         }
 
         // 리스트 조회
-        const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
+        const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
           credentials: 'include',
           signal: controller.signal,
         })
@@ -267,7 +267,7 @@ function ListDetail() {
       }
 
       console.log('POST 요청 전송:', payload)
-      const res = await fetch('http://localhost:5000/api/lists', {
+      const res = await fetch('http://mytsuri.mirim-it-show.site:3001/api/lists', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -297,7 +297,7 @@ function ListDetail() {
   const handleDeleteList = async () => {
     try {
       setListLoading(true)
-      const res = await fetch(`http://localhost:5000/api/lists/${id}`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -320,7 +320,7 @@ function ListDetail() {
   const handleLeaveShare = async () => {
     try {
       setListLoading(true)
-      const res = await fetch(`http://localhost:5000/api/lists/${id}/collaborators/reject`, {
+      const res = await fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}/collaborators/reject`, {
         method: 'POST',
         credentials: 'include',
       })
@@ -559,7 +559,7 @@ function ListDetail() {
           onAddToListSuccess={() => {
             // 리스트 데이터 새로고침 (북마크 수 업데이트)
             if (id && isDetail) {
-              fetch(`http://localhost:5000/api/lists/${id}`, {
+              fetch(`http://mytsuri.mirim-it-show.site:3001/api/lists/${id}`, {
                 credentials: 'include'
               })
                 .then(res => res.ok ? res.json() : null)
