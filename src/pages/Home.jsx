@@ -55,7 +55,10 @@ function Home() {
   const [banners, setBanners] = useState(EMPTY_BANNERS)
   const [categories, setCategories] = useState(EMPTY_CATEGORIES)
   const [cities, setCities] = useState(EMPTY_CITIES)
-  const [festivals, setFestivals] = useState(EMPTY_FESTIVALS)
+  const [trendingFestivals, setTrendingFestivals] = useState(EMPTY_FESTIVALS)
+  const [reviewFestivals, setReviewFestivals] = useState(EMPTY_FESTIVALS)
+  const [upcomingSummerFestivals, setUpcomingSummerFestivals] = useState(EMPTY_FESTIVALS)
+  const [trendingPersonalized, setTrendingPersonalized] = useState(false)
   const [publicLists, setPublicLists] = useState([])
   const [loadError, setLoadError] = useState('')
   const [unreadCount, setUnreadCount] = useState(0)
@@ -68,22 +71,22 @@ function Home() {
     const fetchData = async () => {
       try {
         setLoadError('')
-        const [recommendationsRes, categoriesRes, citiesRes, festivalsRes] = await Promise.all([
+        const [recommendationsRes, categoriesRes, citiesRes, sectionsRes] = await Promise.all([
           fetch('http://localhost:5000/api/recommendations', { signal: controller.signal, credentials: 'include' }),
           fetch('http://localhost:5000/api/home/categories', { signal: controller.signal }),
           fetch('http://localhost:5000/api/home/cities', { signal: controller.signal }),
-          fetch('http://localhost:5000/api/home/festivals', { signal: controller.signal })
+          fetch('http://localhost:5000/api/home/sections', { signal: controller.signal, credentials: 'include' }),
         ])
 
-        if (!recommendationsRes.ok || !categoriesRes.ok || !citiesRes.ok || !festivalsRes.ok) {
+        if (!recommendationsRes.ok || !categoriesRes.ok || !citiesRes.ok || !sectionsRes.ok) {
           throw new Error('홈 데이터를 불러오지 못했어요.')
         }
 
-        const [recommendationsData, categoriesData, citiesData, festivalsData] = await Promise.all([
+        const [recommendationsData, categoriesData, citiesData, sectionsData] = await Promise.all([
           recommendationsRes.json(),
           categoriesRes.json(),
           citiesRes.json(),
-          festivalsRes.json()
+          sectionsRes.json(),
         ])
 
         if (isMounted) {
@@ -93,10 +96,10 @@ function Home() {
             : EMPTY_CATEGORIES
           setCategories(sortedCategories)
           setCities(Array.isArray(citiesData) ? citiesData : EMPTY_CITIES)
-          const sortedFestivals = Array.isArray(festivalsData)
-            ? [...festivalsData].sort((a, b) => (b.bookmarkCount ?? 0) - (a.bookmarkCount ?? 0))
-            : EMPTY_FESTIVALS
-          setFestivals(sortedFestivals)
+          setTrendingFestivals(Array.isArray(sectionsData?.trending) ? sectionsData.trending : EMPTY_FESTIVALS)
+          setReviewFestivals(Array.isArray(sectionsData?.topReviews) ? sectionsData.topReviews : EMPTY_FESTIVALS)
+          setUpcomingSummerFestivals(Array.isArray(sectionsData?.upcomingSummer) ? sectionsData.upcomingSummer : EMPTY_FESTIVALS)
+          setTrendingPersonalized(Boolean(sectionsData?.meta?.trendingPersonalized))
         }
       } catch (error) {
         if (error.name === 'AbortError') {
@@ -162,20 +165,9 @@ function Home() {
     return () => clearInterval(timer)
   }, [banners.length])
 
-  // 섹션별 정렬된 축제 배열 생성
-  const festivalsByBookmarks = [...festivals].sort(
-    (a, b) => (b.bookmarkCount ?? 0) - (a.bookmarkCount ?? 0)
-  )
-  const festivalsByReviews = [...festivals].sort(
-    (a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0)
-  )
-  const festivalsByDate = [...festivals].sort(
-    (a, b) => {
-      const dateA = new Date(a.start_date || a.startDate || '9999-12-31')
-      const dateB = new Date(b.start_date || b.startDate || '9999-12-31')
-      return dateA - dateB
-    }
-  )
+  const trendingSubtitle = trendingPersonalized
+    ? '나와 비슷한 취향의 사람들이 좋아한 축제예요'
+    : '사람들이 많이 찾는 축제들로 모아왔어요!'
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX
@@ -262,12 +254,12 @@ function Home() {
           <div className="section-header">
             <div className="section-header-inner">
               <h3 className="section-title">최근 떠오르는 축제들</h3>
-              <p className="section-subtitle">사람들이 많이 찾는 축제들로 모아왔어요!</p>
+              <p className="section-subtitle">{trendingSubtitle}</p>
             </div>
             <button type="button" className="section-more" aria-label="더보기" onClick={() => navigate('/festivals', { state: { section: 'trending' } })}><ArrowIcon /></button>
           </div>
           <div className="festival-scroll">
-            {festivalsByBookmarks.map((card) => (
+            {trendingFestivals.map((card) => (
               <FestivalCard key={card.id} data={card} onClick={() => navigate(`/festival/${card.id}`, { state: { from: 'home' } })} />
             ))}
           </div>
@@ -277,12 +269,12 @@ function Home() {
           <div className="section-header">
             <div className="section-header-inner">
               <h3 className="section-title">리뷰가 많은 축제들</h3>
-              <p className="section-subtitle">최근 3개월간 가장 리뷰가 많았어요</p>
+              <p className="section-subtitle">리뷰 수가 많고 별점이 높은 순이에요</p>
             </div>
             <button type="button" className="section-more" aria-label="더보기" onClick={() => navigate('/festivals', { state: { section: 'reviews' } })}><ArrowIcon /></button>
           </div>
           <div className="festival-scroll">
-            {festivalsByReviews.map((card) => (
+            {reviewFestivals.map((card) => (
               <FestivalCard key={`r-${card.id}`} data={card} onClick={() => navigate(`/festival/${card.id}`, { state: { from: 'home' } })} />
             ))}
           </div>
@@ -307,13 +299,13 @@ function Home() {
         <section className="festival-section">
           <div className="section-header">
             <div className="section-header-inner">
-              <h3 className="section-title">곧 열릴 예정인 봄 축제</h3>
-              <p className="section-subtitle">요즘 계절에 맞는 봄 축제를 모아봤어요</p>
+              <h3 className="section-title">곧 열릴 여름 축제</h3>
+              <p className="section-subtitle">오늘과 가장 가까운 날짜의 여름 축제예요</p>
             </div>
-            <button type="button" className="section-more" aria-label="더보기" onClick={() => navigate('/festivals', { state: { section: 'spring' } })}><ArrowIcon /></button>
+            <button type="button" className="section-more" aria-label="더보기" onClick={() => navigate('/festivals', { state: { section: 'summer' } })}><ArrowIcon /></button>
           </div>
           <div className="festival-scroll">
-            {festivalsByDate.map((card) => (
+            {upcomingSummerFestivals.map((card) => (
               <FestivalCard key={`s-${card.id}`} data={card} onClick={() => navigate(`/festival/${card.id}`, { state: { from: 'home' } })} />
             ))}
           </div>

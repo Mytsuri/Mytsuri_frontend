@@ -3,6 +3,7 @@
   background: #000;
   color: #F5F5F5;
   padding-bottom: 24px;
+  overflow-x: hidden;
   --top-height: calc(56px + var(--mytsuri-status-inset) + var(--mytsuri-top-buffer));
 }
 
@@ -65,7 +66,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   margin-bottom: 0;
+  min-width: 0;
 }
 
 .festival-detail-title {
@@ -136,14 +139,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-
+  flex-shrink: 0;
   padding: 11px 16px 11px 18px;
   background-color: #000;
   color: #eee;
-
   border: 1px solid #eee;
   border-radius: 185px;
-
   font-size: 12px;
   font-weight: 400;
   line-height: 140%;
@@ -157,24 +158,38 @@
 
 .festival-detail-tabs {
   display: flex;
-  gap: 75px;  
-  padding: 0 20px 0 20px;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.festival-detail-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .festival-detail-tab {
-  flex: 1;
-  padding: 12px 0;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 12px 4px;
   background: none;
   border: none;
   color: #9E9E9E;
-  font-size: 16px;
+  font-size: clamp(13px, 3.6vw, 16px);
   font-weight: 400;
   line-height: 140%;
   letter-spacing: -0.16px;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
+  text-align: center;
 }
 
 .festival-detail-tab.active {
@@ -211,10 +226,12 @@
   margin: 0 0 12px;
   font-size: 0.9rem;
   color: #FFF;
-  overflow: hidden;
+  min-width: 0;
 }
 
 .festival-detail-detail-row span {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -341,7 +358,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   padding: 20px 0;
+  min-width: 0;
 }
 
 .review-sort-btn {
@@ -357,6 +377,7 @@
   line-height: 140%;
   letter-spacing: -0.14px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .review-write-btn {
@@ -373,6 +394,8 @@
   line-height: 140%;
   letter-spacing: -0.12px;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .review-write-btn svg {
@@ -552,8 +575,43 @@
 
 .directions-map-container {
   width: 100%;
-  height: 400px;
+  max-width: 100%;
+  height: min(400px, 55vh);
   border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
+}
+
+@media (max-width: 360px) {
+  .festival-detail-info {
+    padding: 0 16px;
+  }
+
+  .festival-detail-hero {
+    padding: 0 16px;
+  }
+
+  .festival-detail-overview,
+  .festival-detail-tab-content {
+    padding: 16px;
+  }
+
+  .festival-detail-tabs {
+    padding: 0 8px;
+  }
+
+  .festival-detail-tab {
+    padding: 12px 2px;
+    font-size: 13px;
+  }
+
+  .festival-detail-homepage-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .festival-detail-activity-card {
+    flex: 0 0 min(180px, 72vw);
+  }
 }

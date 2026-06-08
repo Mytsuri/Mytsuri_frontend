@@ -92,6 +92,14 @@ function OnboardingSurvey() {
       } catch {
         // ignore
       }
+      try {
+        await fetch('http://localhost:5000/api/users/me/onboarding-complete', {
+          method: 'POST',
+          credentials: 'include',
+        })
+      } catch {
+        // ignore — saveSurvey already marks complete when successful
+      }
       window.dispatchEvent(new Event('onboardingCompleted'))
       navigate('/', { replace: true })
     }
@@ -105,7 +113,15 @@ function OnboardingSurvey() {
     }
   }
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    try {
+      await fetch('http://localhost:5000/api/users/me/onboarding-complete', {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      // ignore
+    }
     window.dispatchEvent(new Event('onboardingCompleted'))
     navigate('/', { replace: true })
   }

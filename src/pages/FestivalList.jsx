@@ -25,7 +25,9 @@ function CalendarIcon() {
 const SECTION_TITLES = {
   trending: '최근 떠오르는 축제들',
   reviews: '리뷰가 많은 축제들',
-  spring: '곧 열릴 예정인 봄 축제',
+  summer: '곧 열릴 여름 축제',
+  upcoming: '곧 열릴 여름 축제',
+  spring: '곧 열릴 여름 축제',
 }
 
 function FestivalList() {
@@ -62,7 +64,9 @@ function FestivalList() {
           params.append('season', category)
         }
 
-        const response = await fetch(`http://localhost:5000/api/festivals?${params.toString()}`)
+        const response = await fetch(`http://localhost:5000/api/festivals?${params.toString()}`, {
+          credentials: 'include',
+        })
         
         if (!response.ok) {
           throw new Error('축제 데이터를 불러올 수 없습니다')

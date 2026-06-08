@@ -20,7 +20,6 @@ import OnboardingSurvey from './pages/OnboardingSurvey'
 import ReviewWrite from './pages/ReviewWrite'
 
 function App() {
-  const ONBOARDING_DONE_KEY = 'mytsuri_onboarding_done'
   const [authStatus, setAuthStatus] = useState('loading')
   const [needsOnboarding, setNeedsOnboarding] = useState(false)
 
@@ -67,12 +66,7 @@ function App() {
         }
 
         const userData = await res.json().catch(() => ({}))
-        const onboardingCompleted =
-          Boolean(userData?.onboardingCompleted) ||
-          localStorage.getItem(ONBOARDING_DONE_KEY) === 'true'
-        if (onboardingCompleted) {
-          localStorage.setItem(ONBOARDING_DONE_KEY, 'true')
-        }
+        const onboardingCompleted = Boolean(userData?.onboardingCompleted)
         setNeedsOnboarding(!onboardingCompleted)
         setAuthStatus('authed')
       } catch (error) {
@@ -89,13 +83,13 @@ function App() {
     // 로그아웃 이벤트 리스너
     const handleLogout = () => {
       if (isMounted) {
+        localStorage.removeItem('mytsuri_onboarding_done')
         setAuthStatus('guest')
         setNeedsOnboarding(false)
       }
     }
     const handleOnboardingCompleted = () => {
       if (isMounted) {
-        localStorage.setItem(ONBOARDING_DONE_KEY, 'true')
         setNeedsOnboarding(false)
       }
     }
@@ -151,7 +145,15 @@ function App() {
       <Route path="/festival/:id/review" element={getProtectedElement(<ReviewWrite />)} />
 
       {/* 404 - 와일드카드는 반드시 마지막 */}
-      <Route path="*" element={<Navigate to={isLoggedIn ? '/' : '/login'} replace />} />
+      <Route
+        path="*"
+        element={
+          <Navigate
+            to={isLoggedIn ? (needsOnboarding ? '/onboarding' : '/') : '/login'}
+            replace
+          />
+        }
+      />
     </Routes>
   )
 }
